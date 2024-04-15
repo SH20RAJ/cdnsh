@@ -1,1 +1,48 @@
-sh20raj.com
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+</head>
+<body>
+  <h1>File Upload</h1>
+  <input type="file" id="fileInput" accept=".txt,.pdf,.doc,.docx,.jpg,.png" required>
+  <br><br>
+  <button onclick="uploadFile()">Upload File</button>
+
+  <script>
+    function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Please select a file.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('File upload successful:', data);
+        alert('File upload successful!');
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+        alert('Error uploading file. Please try again.');
+      });
+    }
+  </script>
+</body>
+</html>
